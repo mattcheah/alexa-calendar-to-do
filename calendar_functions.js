@@ -137,18 +137,18 @@ module.exports = {
   
   getAllDoListItems: function(events) {
       return new Promise(function(resolve,reject) {
-       
+          var eventTitles = ["do", , "to-do", "to do", "do list", "todo"];
           var doList = "noDoList";
-           console.log("events: ", events);
+          //console.log("events: ", events);
           for(var i = 0; i < events.length; i++) {
-              if (events[i].summary == "Do" || events[i].summary == "do") {
-                  console.log("description of do event: "+events[i].description);
+              if (eventTitles.includes(events[i].summary.toLowerCase())) {
+                  //console.log("description of do event: "+events[i].description);
                   if (events[i].description) {
-                      console.log("events description is something.")
+                      //console.log("events description is something.")
                       doList = events[i].description.split("\n");
                       break;
                   } else {
-                      console.log("events description is nothing. ")
+                      //console.log("events description is nothing. ")
                       doList = "emptyDoList";
                       break;
                   }
@@ -162,11 +162,11 @@ module.exports = {
   
   getDoListEvent: function(events) {
       return new Promise(function(resolve,reject) {
-       
+          var eventTitles = ["do", , "to-do", "to do", "do list", "todo", "do:"];
           var doList = "";
-          console.log("events: ", events);
+          //console.log("events: ", events);
           for(var i = 0; i < events.length; i++) {
-              if (events[i].summary == "Do" || events[i].summary == "do") {
+              if (eventTitles.includes(events[i].summary.toLowerCase())) {
                   doList = events[i];
               }
           }
@@ -184,7 +184,7 @@ module.exports = {
           var doneItems = ["done", "--", "complete", "completed", "finished"];
        
           for (var i=0; i<doList.length; i++) {
-              if(doneItems.includes(doList[i])) {
+              if(doneItems.includes(doList[i].toLowerCase())) {
                   doList.splice(i);
                   break;
               } else if (doList[i] == "") {
@@ -207,15 +207,7 @@ module.exports = {
           
           if (doList.description) {
               doList = doList.description.split("\n");
-              var doneItems = ["done", "--", "complete", "completed", "finished"];
-              
-               
-              for (var i=0; i<doList.length; i++) {
-                  if (doneItems.includes(doList[i])) {
-                      doList.splice(i, 0, item);
-                      break;
-                  } 
-              }
+              doList.push(item);
               doListString = doList.join("\n"); 
           } else {
               doListString = item;
