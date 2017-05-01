@@ -16,32 +16,17 @@ exports.handler = function(event, context, callback) {
         WAITMARKITEMCOMPLETED: '_WAITMARKITEMCOMPLETED'
     }
     
-    
-    
-    var newSessionHandlers = {
-         // This will short-cut any incoming intent or launch requests and route them to this handler.
-        'NewSession': function() {
-            if (!global.token) {
-                console.log("access token does not exist");
-                this.emit(':tell', 'You do not have a google calendar linked. Please go to the Calendar Do List skill in your amazon mobile app and link to your google account.');
-            } else {
-                this.handler.state = states.STARTMODE;
-                this.emit(':ask', 'What would you like to do?', 'Ask What do I have to do today or add something to my do list.');
-            }
-        },
-        'Unhandled': function() {
-            var message = 'Ask whats on my do list or add something to my do list.';
-            this.emit(':ask', message, message);
-        }
-    };
-    
     var startModeHandlers = Alexa.CreateStateHandler(states.STARTMODE, {
         
         // Equivalent to the Start Mode NewSession handler
         'NewSession': function() {
-            
-            this.handler.state = '';
-            this.emitWithState('NewSession'); 
+            if (!global.token) {
+                //console.log("access token does not exist");
+                this.emit(':tellWithLinkAccountCard', 'You do not have a google calendar linked. Please go to the Calendar Do List skill in your amazon mobile app and link to your google account.');
+            } else {
+                this.handler.state = states.STARTMODE;
+                this.emit(':ask', 'What would you like to do?', 'Ask What do I have to do today or add something to my do list.');
+            } 
         },
         'peekDoListIntent': function() {
             global.alexa = (this);
@@ -78,7 +63,7 @@ exports.handler = function(event, context, callback) {
                 
             })
             .catch(function(err) {
-                console.log("error here!: "+err);
+                //console.log("error here!: "+err);
                 global.alexa.emit(':tell', "Skill Error: "+err);
             });
         },
@@ -103,24 +88,25 @@ exports.handler = function(event, context, callback) {
     var noDoListHandlers = Alexa.CreateStateHandler(states.NODOLIST, {
         // Equivalent to the Start Mode NewSession handler
         'NewSession': function () {
-            this.handler.state = '';
+            this.handler.state = states.STARTMODE;
             this.emitWithState('NewSession'); 
         },
-        'yesIntent': function() {
+        'AMAZON.YesIntent': function() {
             
             global.alexa = (this);
             global.alexa.handler.state = states.STARTMODE;
             
             calendar.createDoList()
             .then(function() {
-                global.alexa.emit(':tell', 'A new do list has been created for you on todays calendar');
+                global.alexa.handler.state = states.WAITADDITEM;
+                global.alexa.emit(':ask', 'A new do list has been created for you on todays calendar. What would you like to add to your do list?', 'Say a task that you\'d like to add to your calendar do list, or say cancel.');
             })
             .catch(function(err) {
-                console.log("Error: "+err);
+                //console.log("Error: "+err);
                 global.alexa.emit(':tell', 'There was an Error: ' + err);
             });
         },
-        'noIntent': function() {
+        'AMAZON.NoIntent': function() {
             this.emit(':tell', 'Thank you for using calendar do list');
         },
         'Unhandled': function() {
@@ -131,7 +117,7 @@ exports.handler = function(event, context, callback) {
     
     var waitAddItemHandlers = Alexa.CreateStateHandler(states.WAITADDITEM, {
         'NewSession': function () {
-            this.handler.state = '';
+            this.handler.state = states.STARTMODE;
             this.emitWithState('NewSession'); 
         },
         'addItem': function() {
@@ -148,15 +134,20 @@ exports.handler = function(event, context, callback) {
                     return calendar.insertItemInDoList(doList, item);
                 })
                 .then(function() {
-                    console.log("item added from yes intent on waitAdditemhandlers");
-                    global.alexa.handler.state = states.STARTMODE;
-                    global.alexa.emit(':tell', item+' has been added to your do list.');
+                    //console.log("item added from yes intent on waitAdditemhandlers");
+                    global.alexa.emit(':ask', item+' has been added to your do list. Would you like to add something else?', 'What would you like to add to your do list?');
                 }).catch(function(err) {
                     global.alexa.emit(':tell', 'Error: '+err);
                 });
             } else {
                 global.alexa.emit(':ask', 'What would you like to add to your do list?', 'Say a task that you\'d like to add to your calendar do list');
             }
+        },
+        'AMAZON.YesIntent': function() {
+            this.emit(':ask', 'What would you like to add to your do list?', 'Say a task that you\'d like to add to your calendar do list');
+        },
+        'AMAZON.NoIntent': function() {
+            this.emit(':tell', 'Thank you for using calendar do list');
         },
         'Unhandled': function() {
             var message = "Say an Item to add to your do list, or say exit, to cancel."
@@ -165,10 +156,14 @@ exports.handler = function(event, context, callback) {
     });
     
     var waitMarkItemCompletedHandlers = Alexa.CreateStateHandler(states.WAITMARKITEMCOMPLETED, {
+        'NewSession': function () {
+            this.handler.state = states.STARTMODE;
+            this.emitWithState('NewSession'); 
+        },
         'completeItem': function() {
             global.alexa = (this);
             var item = event.request.intent.slots.to_do_item.value || parseInt(event.request.intent.slots["AMAZON.NUMBER"].value)
-            console.log("item: "+item );
+            //console.log("item: "+item );
             if (item) {
                 // add this item to the description;
                 calendar.getAllCalendars()
@@ -179,12 +174,12 @@ exports.handler = function(event, context, callback) {
                     return calendar.completeItemInList(doList, item);
                 })
                 .then(function() {
-                    console.log("Item marked completed in do list from startmode");
-                    global.alexa.handler.state = states.STARTMODE;
+                    //console.log("Item marked completed in do list from startmode");
+                    //global.alexa.handler.state = states.STARTMODE;
                     if (typeof item == "number") {
-                        global.alexa.emit(':tell', 'Item number '+item+' has been marked as complete');
+                        global.alexa.emit(':ask', 'Item number '+item+' has been marked as complete. Would you like to mark another item as complete?', 'Say an item or number in the list that you would like to mark as complete.');
                     } else {
-                        global.alexa.emit(':tell', item+' has been marked as complete');
+                        global.alexa.emit(':ask', item+' has been marked as complete, would you like to mark another item as complete?', 'Say an item or number in the list that you would like to mark as complete.');
                     }
                 }).catch(function(err) {
                     if (err == "noItemFound") {
@@ -195,8 +190,14 @@ exports.handler = function(event, context, callback) {
                     }
                 });
             } else {
-                global.alexa.emit(':ask', 'What would you like to add to your do list?', 'Say a task that you\'d like to add to your calendar do list');
+                global.alexa.emit(':ask', 'What item would you like to mark as complete?', 'Say an item or number in the list that you would like to mark as complete.');
             }
+        },
+        'AMAZON.YesIntent': function() {
+            this.emit(':ask', 'What item would you like to mark as complete?', 'Say an item or number in the list that you would like to mark as complete.');
+        },
+        'AMAZON.NoIntent': function() {
+            this.emit(':tell', 'Thank you for using calendar do list');
         },
         'Unhandled': function() {
             var message = "Say an item to mark as complete, or say exit, to cancel."
@@ -205,7 +206,7 @@ exports.handler = function(event, context, callback) {
         
     });
     
-    alexa.registerHandlers(newSessionHandlers, startModeHandlers, noDoListHandlers, waitAddItemHandlers, waitMarkItemCompletedHandlers);
+    alexa.registerHandlers(startModeHandlers, noDoListHandlers, waitAddItemHandlers, waitMarkItemCompletedHandlers);
     alexa.execute();
 };
 

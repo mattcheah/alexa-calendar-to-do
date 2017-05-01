@@ -53,7 +53,7 @@ module.exports = {
                  reject("Error GETing calendar list data from the Google Calendar API");  
               } else {
                  var ids = [];
-                 console.log("successfully made GET request: ", body);
+                 //console.log("successfully made GET request: ", body);
 
                  var allCalendars = JSON.parse(body).items;
                  for(var i=0; i<allCalendars.length; i++) {
@@ -83,7 +83,7 @@ module.exports = {
       var promisesArray = [];
 
       // Go through all the calendars and make a request to google to get the events from that calendar. 
-      console.log("all calendars: ", allCalendars);
+      //console.log("all calendars: ", allCalendars);
       for (var i = 0; i < allCalendars.length; i++) {
           
           var nestPromise = new Promise((resolve, reject) => {
@@ -264,7 +264,7 @@ module.exports = {
               if (error) {
                   reject("Error POSTing data to the Google Calendar API");  
               } else {
-                  console.log("successfully made POST request to create do list");
+                  //console.log("successfully made POST request to create do list");
                   resolve();
               }
           });
@@ -315,7 +315,7 @@ module.exports = {
               }
               if (edited == true) {
                   doListString = doList.join("\n"); 
-                  console.log("Do list string: "+doListString);
+                  //console.log("Do list string: "+doListString);
               
                   var url1 = 'https://www.googleapis.com/calendar/v3/calendars/'
                   var url2 = '/events/';
@@ -337,10 +337,10 @@ module.exports = {
                       if (error) {
                         reject("Error PATCHing data to the Google Calendar API");  
                       } else {
-                         console.log("successfully made PATCH request");
-                         console.log("body: "+body);
-                         console.log("response: "+JSON.stringify(response));
-                         console.log("error: "+error);
+                         // console.log("successfully made PATCH request");
+                         // console.log("body: "+body);
+                         // console.log("response: "+JSON.stringify(response));
+                         // console.log("error: "+error);
                          
                          resolve();
                       }
