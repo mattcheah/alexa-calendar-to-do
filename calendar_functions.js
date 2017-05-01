@@ -170,19 +170,16 @@ module.exports = {
                   doList = events[i];
               }
           }
-          if (doList == "") {
-              resolve(0);
-          }
           
           resolve(doList);
+          
       });
   },
   
   getDoListItems: function(doList) {
       return new Promise(function(resolve, reject) {
        
-          var doneItems = ["done", "--", "complete", "completed", "finished"];
-       
+          var doneItems = ["done", "done:", "--", "complete", "completed", "finished"];
           for (var i=0; i<doList.length; i++) {
               if(doneItems.includes(doList[i].toLowerCase())) {
                   doList.splice(i);
@@ -192,8 +189,12 @@ module.exports = {
                   i--;
               }
           }
-          
-          resolve(doList);
+          console.log("Do list from getDoListItems: "+doList);
+          if (doList == "") {
+              resolve("emptyDoList");
+          } else {
+            resolve(doList);
+          }
           
       });
       
@@ -207,12 +208,13 @@ module.exports = {
           
           if (doList.description) {
               doList = doList.description.split("\n");
-              doList.push(item);
+              doList.unshift(item);
               doListString = doList.join("\n"); 
           } else {
-              doListString = item;
+              doListString = item+"\n\ndone:";
           }
           
+          console.log("DoListString: "+doListString);
           var url1 = 'https://www.googleapis.com/calendar/v3/calendars/'
           var url2 = '/events/';
 
@@ -269,6 +271,90 @@ module.exports = {
       });
   },
   
+  completeItemInList:function(doList, item) {
+      return new Promise(function(resolve,reject) {
+          var id = doList.id;
+          var calendar = doList.creator.email;
+          var doListString = "";
+          var edited = false;
+          
+          if (doList.description) {
+              doList = doList.description.split("\n");
+              var doneIndex = module.exports.getDoneIndex(doList); 
+              var edited = false;
+              
+              
+              
+              if (typeof item == "number") {
+                  item--;
+                  
+                  if (item >= doneIndex ) {
+                    reject("Item is already marked as done.");                    
+                  } else if (typeof doList[item] == "undefined") {
+                    reject("There is no list item number "+(item+1)+" on the list.");
+                  } else {
+                    doList = module.exports.removeEmptyLines(doList);
+                    doList.push(doList.splice(item, 1));
+                    edited = true;
+                  }
+                  
+              } else {
+                for(var i = 0; i<doList.length; i++) {
+                    if (doList[i].toLowerCase() == item.toLowerCase()) {
+                        doList.splice(i, 1).push(item);
+                        edited = true;
+                        break;
+                    }
+                }
+              }
+              
+              
+              if (doneIndex == -1) {
+                 doList.splice(doList.length - 2, 0, "\n", "done");
+                 edited = true;
+              }
+              if (edited == true) {
+                  doListString = doList.join("\n"); 
+                  console.log("Do list string: "+doListString);
+              
+                  var url1 = 'https://www.googleapis.com/calendar/v3/calendars/'
+                  var url2 = '/events/';
+        
+                  var options = {
+                      url: (url1 + calendar + url2 + id),
+                      method: 'PATCH',
+                      headers: {
+                          Authorization: 'Bearer '+global.token,
+                      },
+                      body: {
+                          description: doListString,
+                      },
+                      json:true
+                  }; 
+                  
+                  request(options, function (error, response, body) {
+                       
+                      if (error) {
+                        reject("Error PATCHing data to the Google Calendar API");  
+                      } else {
+                         console.log("successfully made PATCH request");
+                         console.log("body: "+body);
+                         console.log("response: "+JSON.stringify(response));
+                         console.log("error: "+error);
+                         
+                         resolve();
+                      }
+                  });
+              } else {
+                  reject("noItemFound");
+              }
+              
+          } else {
+              reject("There are no items in your do list.");
+          }
+      });
+  },
+  
   doListToString: function(doList, number) {
       var itemsList = "";
       if(number) {
@@ -303,6 +389,26 @@ module.exports = {
           }
       }
       return itemsList;
+  },
+  
+  getDoneIndex: function(doList) {
+      var doneItems = ["done", "done:", "--", "complete", "completed", "finished"];
+      for(var i = 0; i<doList.length; i++) {
+          if (doneItems.includes(doList[i].toLowerCase())) {
+              return i;
+          }
+      }
+      return -1;
+  },
+  
+  removeEmptyLines: function(doList) {
+      for(var i = 0; i<doList.length; i++) {
+          if (doList[i] == "") {
+              doList.splice(i, 1);
+              i--;
+          }
+      }
+      return doList;
   },
   
   

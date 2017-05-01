@@ -11,13 +11,67 @@ To represent completed items, add a line that says "Done" or "Completed" and pla
 
 ## Reading your do list: 
 
-> Alexa, ask Calendar To Do what's on my do list? 
+To have Alexa read your list, follow the prompts:
 
-> what do I have to do today?
+* Alexa, start Calendar To Do.
+* What's on my do list?
 
 ## Adding To Your Do List:
 
-> Alexa, start Calendar To Do.
-> Add "Do Laundry" to my do list. 
- * If alexa does not recognize what you said, it will ask you what you want to put on the list.
-> "Do Laundry"
+To add something to your list, follow the prompts:
+
+* Alexa, start Calendar To Do.
+* Add something to my do list. 
+* "Do Laundry"
+
+Alexa will often have trouble understanding exactly what you're saying, and will sometimes give you a low chime or prompt you to repeat yourself when it doesn't understand you. 
+Try saying a different variation of what you want to add (eg. "Wash my Clothes" instead of "Do Laundry")
+
+## Marking an item as completed. 
+
+To mark something as completed, follow the prompts:
+
+* Alexa, start Calendar To Do.
+* Mark something as completed
+* "Do Laundry"
+
+The same difficulties with recognizing the language applies in this situation, but unfortunately Alexa will not be able to recognize a differently phrased version of your item. 
+We recommend a slightly more complicated approach which involves telling Alexa which numbered item you'd like to mark as complete. 
+
+* Alexa, start Calendar To Do.
+* Mark something as completed
+* 3
+
+The following example will demonstrate this.
+
+# Examples
+
+* Alexa, start Calendar To Do.
+
+> What would you like to do?
+
+* What's on my do list?
+
+> You have 3 things on your do list: Clean Kitchen, Mow Lawn, and Do Laundry. 
+
+* Mark something as completed
+
+> What would you like to mark as completed?
+
+* "Do Laundry"
+or
+* "3"
+
+> "Do Laundry has been marked as completed.
+
+* Add something to my do list
+
+> What would you like to add to your do list?
+
+* "Do Laundry"
+
+> Do Laundry has been added to your do list.
+
+## Questions or Comments?
+
+Any concerns can be directed to me at matt.cheah@gmail.com
