@@ -50,7 +50,7 @@ module.exports = {
           request(options, function (error, response, body) {
                
               if (error) {
-                 reject("Error GETing calendar list data from the Google Calendar API");  
+                 reject("Error GETting calendar list data from the Google Calendar API");  
               } else {
                  var ids = [];
                  //console.log("successfully made GET request: ", body);
@@ -83,7 +83,7 @@ module.exports = {
       var promisesArray = [];
 
       // Go through all the calendars and make a request to google to get the events from that calendar. 
-      //console.log("all calendars: ", allCalendars);
+     //console.log("all calendars: ", allCalendars);
       for (var i = 0; i < allCalendars.length; i++) {
           
           var nestPromise = new Promise((resolve, reject) => {
@@ -93,7 +93,7 @@ module.exports = {
                   if (error) {
                     reject("Error returning data from the Google Calendar API");  
                   } else {
-                     //console.log("successfully made request and returned body: ", body);
+                    //console.log("successfully made request and returned body: ", body);
                      var events = JSON.parse(body).items;
                      resolve(events);
                   }
@@ -115,7 +115,7 @@ module.exports = {
       return new Promise(function(resolve,reject) {
           var events = [];
           //console.log("EventsArray: ",eventsArray);
-           console.log("EventsArray: ", eventsArray);
+          //console.log("EventsArray: ", eventsArray);
           for(var i = 0; i <eventsArray.length; i++) {
               //console.log("eventsArray["+i+"]: "+JSON.stringify(eventsArray[i]));
               events = events.concat(eventsArray[i]);
@@ -154,7 +154,7 @@ module.exports = {
                   }
               }
           }
-          console.log("resolving do list: "+doList);
+         //console.log("resolving do list: "+doList);
           resolve(doList);
           
       });
@@ -189,7 +189,7 @@ module.exports = {
                   i--;
               }
           }
-          console.log("Do list from getDoListItems: "+doList);
+         //console.log("Do list from getDoListItems: "+doList);
           if (doList == "") {
               resolve("emptyDoList");
           } else {
@@ -214,7 +214,8 @@ module.exports = {
               doListString = item+"\n\ndone:";
           }
           
-          console.log("DoListString: "+doListString);
+         //console.log("DoListString: "+doListString);
+          
           var url1 = 'https://www.googleapis.com/calendar/v3/calendars/'
           var url2 = '/events/';
 
@@ -235,10 +236,10 @@ module.exports = {
               if (error) {
                 reject("Error PATCHing data to the Google Calendar API");  
               } else {
-                 console.log("successfully made PATCH request");
-                 console.log("body: "+body);
-                 console.log("response: "+JSON.stringify(response));
-                 console.log("error: "+error);
+                //console.log("successfully made PATCH request");
+                //console.log("body: "+body);
+                //console.log("response: "+JSON.stringify(response));
+                //console.log("error: "+error);
                  
                  resolve();
               }
@@ -264,7 +265,7 @@ module.exports = {
               if (error) {
                   reject("Error POSTing data to the Google Calendar API");  
               } else {
-                  //console.log("successfully made POST request to create do list");
+                 //console.log("successfully made POST request to create do list");
                   resolve();
               }
           });
@@ -315,7 +316,7 @@ module.exports = {
               }
               if (edited == true) {
                   doListString = doList.join("\n"); 
-                  //console.log("Do list string: "+doListString);
+                 //console.log("Do list string: "+doListString);
               
                   var url1 = 'https://www.googleapis.com/calendar/v3/calendars/'
                   var url2 = '/events/';
@@ -337,10 +338,10 @@ module.exports = {
                       if (error) {
                         reject("Error PATCHing data to the Google Calendar API");  
                       } else {
-                         // console.log("successfully made PATCH request");
-                         // console.log("body: "+body);
-                         // console.log("response: "+JSON.stringify(response));
-                         // console.log("error: "+error);
+                         //console.log("successfully made PATCH request");
+                         //console.log("body: "+body);
+                         //console.log("response: "+JSON.stringify(response));
+                         //console.log("error: "+error);
                          
                          resolve();
                       }
