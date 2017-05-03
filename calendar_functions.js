@@ -304,14 +304,13 @@ module.exports = {
                   }
                   
               } else {
-                console.log("Item is: "+item);
+                
                 for(var i = 0; i<doList.length; i++) {
                     if (doList[i].toLowerCase() == item.toLowerCase()) {
-                        console.log("Match! "+doList[i].toLowerCase());
-                        console.log("Before dolist: "+doList);
+                        
                         doList.splice(i, 1);
                         doList.push(item);
-                        console.log("After dolist: "+doList);
+                       
                         edited = true;
                         break;
                     }

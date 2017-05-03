@@ -49,14 +49,16 @@ exports.handler = function(event, context, callback) {
                         } else if (doList.length > 7) {
                             analytics.event("Response", "Reading Do List", "peekDoListIntent from newSessionHandlers").send();
                             var length = doList.length;
+                            var items = (length == 1) ?  " item" : " items";
                             var itemsList = calendar.doListToString(doList, 7);
-                            global.alexa.emit(':ask', 'You have '+length+' things on your to-do list. The first 7 are: '+itemsList+'. What would you like to do?', 'Ask What do I have to do today or add something to my do list.');
+                            global.alexa.emit(':ask', 'You have '+length+items+ ' on your to-do list. The first 7 are: '+itemsList+'. What would you like to do?', 'Ask What do I have to do today or add something to my do list.');
                         } else if ( doList.length > 0 ) {
                             analytics.event("Response", "Reading Do List", "peekDoListIntent from newSessionHandlers").send();
                             var length = doList.length;
+                            var items = (length == 1) ?  " item" : " items";
                             var itemsList = calendar.doListToString(doList);
                             
-                            global.alexa.emit(':ask', 'You have '+length+' things on your to-do list: ' + itemsList+'. What would you like to do?', 'Ask What do I have to do today or add something to my do list.');
+                            global.alexa.emit(':ask', 'You have '+length+things+' on your to-do list: ' + itemsList+'. What would you like to do?', 'Ask What do I have to do today or add something to my do list.');
                         }
                         resolve;
                     });
