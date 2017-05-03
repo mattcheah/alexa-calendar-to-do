@@ -19,20 +19,11 @@ exports.handler = function(event, context, callback) {
     
     var newSessionHandlers = {
         
-        // 'NewSession': function() {
-        //     if (!global.token) {
-        //         //console.log("access token does not exist");
-        //         this.emit(':tellWithLinkAccountCard', 'You do not have a google calendar linked. Please go to the Calendar Do List skill in your amazon mobile app and link to your google account.');
-        //     } else {
-        //         this.handler.state = '';
-        //         this.emit(':ask', 'What would you like to do?', 'Ask What do I have to do today or add something to my do list.');
-        //     } 
-        // },
         'peekDoListIntent': function() {
             if (!global.token) {
                 //console.log("access token does not exist");
                 analytics.event("Error", "Account Not Linked", "peekDoListIntent from newSessionHandlers").send();
-                this.emit(':tellWithLinkAccountCard', 'You do not have a google calendar linked. Please go to the Calendar Do List skill in your amazon mobile app and link to your google account.');
+                this.emit(':tellWithLinkAccountCard', 'You do not have a google calendar linked. Please go to the calendar to-do skill in your amazon mobile app and link to your google account.');
             } else {
                 global.alexa = (this);
                     
@@ -84,7 +75,7 @@ exports.handler = function(event, context, callback) {
             if (!global.token) {
                 //console.log("access token does not exist");
                 analytics.event("Error", "Account Not Linked", "addToDoListIntent from newSessionHandlers").send();
-                this.emit(':tellWithLinkAccountCard', 'You do not have a google calendar linked. Please go to the Calendar Do List skill in your amazon mobile app and link to your google account.');
+                this.emit(':tellWithLinkAccountCard', 'You do not have a google calendar linked. Please go to the calendar to-do skill in your amazon mobile app and link to your google account.');
             } else {
                 
                 global.alexa = (this);
@@ -106,7 +97,7 @@ exports.handler = function(event, context, callback) {
                         } else {
                             analytics.event("Prompt", "What to add to do List?", "addToDoListIntent from newSessionHandlers").send();
                             global.alexa.handler.state = states.WAITADDITEM;
-                            global.alexa.emit(':ask', 'What would you like to add to your do list?', 'Say a task that you\'d like to add to your calendar do list');
+                            global.alexa.emit(':ask', 'What would you like to add to your do list?', 'Say a task that you\'d like to add to your calendar to-do');
                         }
                         resolve;
                     });
@@ -125,7 +116,7 @@ exports.handler = function(event, context, callback) {
             if (!global.token) {
                 //console.log("access token does not exist");
                 analytics.event("Error", "Account Not Linked", "completeDoListIntent from newSessionHandlers").send();
-                this.emit(':tellWithLinkAccountCard', 'You do not have a google calendar linked. Please go to the Calendar Do List skill in your amazon mobile app and link to your google account.');
+                this.emit(':tellWithLinkAccountCard', 'You do not have a google calendar linked. Please go to the calendar to-do skill in your amazon mobile app and link to your google account.');
             } else {
                 global.alexa = (this);
                     
@@ -173,7 +164,7 @@ exports.handler = function(event, context, callback) {
             if (!global.token) {
                 //console.log("access token does not exist");
                 analytics.event("Error", "Account Not Linked", "AMAZON.HelpIntent from newSessionHandlers").send();
-                this.emit(':tellWithLinkAccountCard', 'You do not have a google calendar linked. Please go to the Calendar Do List skill in your amazon mobile app and link to your google account.');
+                this.emit(':tellWithLinkAccountCard', 'You do not have a google calendar linked. Please go to the calendar to-do skill in your amazon mobile app and link to your google account.');
             } else {
                 analytics.event("Response", "Help Response", "AMAZON.HelpIntent from newSessionHandlers").send();
                 var message = 'Ask whats on my do list or add something to my do list.'
@@ -182,17 +173,17 @@ exports.handler = function(event, context, callback) {
         },
         'AMAZON.CancelIntent': function() {
             analytics.event("Response", "EndSession", "AMAZON.CancelIntent from newSessionHandlers").send();
-            this.emit(':tell', 'Thank you for using calendar do list');
+            this.emit(':tell', 'Thank you for using calendar to-do');
         },
         'AMAZON.StopIntent': function() {
             analytics.event("Response", "EndSession", "AMAZON.StopIntent from newSessionHandlers").send();
-            this.emit(':tell', 'Thank you for using calendar do list');
+            this.emit(':tell', 'Thank you for using calendar to-do');
         },
         'Unhandled': function() {
             if (!global.token) {
                 //console.log("access token does not exist");
                 analytics.event("Error", "Account Not Linked", "Unhandled from newSessionHandlers").send();
-                this.emit(':tellWithLinkAccountCard', 'You do not have a google calendar linked. Please go to the Calendar Do List skill in your amazon mobile app and link to your google account.');
+                this.emit(':tellWithLinkAccountCard', 'You do not have a google calendar linked. Please go to the calendar to-do skill in your amazon mobile app and link to your google account.');
             } else {
                 analytics.event("Prompt", "What to do?", "Unhandled from newSessionHandlers").send();
                  
@@ -222,7 +213,7 @@ exports.handler = function(event, context, callback) {
                 analytics.event("Response", "Do List Created", "AMAZON.YesIntent from noDoListHandlers").send();
                 
                 global.alexa.handler.state = states.WAITADDITEM;
-                global.alexa.emit(':ask', 'A new do list has been created for you on todays calendar. What would you like to add to your do list?', 'Say a task that you\'d like to add to your calendar do list, or say cancel.');
+                global.alexa.emit(':ask', 'A new do list has been created for you on todays calendar. What would you like to add to your do list?', 'Say a task that you\'d like to add to your calendar to-do, or say cancel.');
             })
             .catch(function(err) {
                 //console.log("Error: "+err);
@@ -232,15 +223,15 @@ exports.handler = function(event, context, callback) {
         },
         'AMAZON.NoIntent': function() {
             analytics.event("Response", "EndSession", "AMAZON.NoIntent from noDoListHandlers").send();
-            this.emit(':tell', 'Thank you for using calendar do list');
+            this.emit(':tell', 'Thank you for using calendar to-do');
         },
         'AMAZON.CancelIntent': function() {
             analytics.event("Response", "EndSession", "AMAZON.CancelIntent from noDoListHandlers").send();
-            this.emit(':tell', 'Thank you for using calendar do list');
+            this.emit(':tell', 'Thank you for using calendar to-do');
         },
         'AMAZON.StopIntent': function() {
             analytics.event("Response", "EndSession", "AMAZON.StopIntent from noDoListHandlers").send();
-            this.emit(':tell', 'Thank you for using calendar do list');
+            this.emit(':tell', 'Thank you for using calendar to-do');
         },
         'AMAZON.HelpIntent': function() {
             analytics.event("Response", "Help Response", "AMAZON.HelpIntent from noDoListHandlers").send();
@@ -286,24 +277,24 @@ exports.handler = function(event, context, callback) {
                 });
             } else {
                 analytics.event("Prompt", "What to Add?", "addItem from waitAddItemHandlers").send();
-                global.alexa.emit(':ask', 'What would you like to add to your do list?', 'Say a task that you\'d like to add to your calendar do list');
+                global.alexa.emit(':ask', 'What would you like to add to your do list?', 'Say a task that you\'d like to add to your calendar to-do');
             }
         },
         'AMAZON.YesIntent': function() {
             analytics.event("Prompt", "What to Add?", "AMAZON.NoIntent from waitAddItemHandlers").send();
-            this.emit(':ask', 'What would you like to add to your do list?', 'Say a task that you\'d like to add to your calendar do list');
+            this.emit(':ask', 'What would you like to add to your do list?', 'Say a task that you\'d like to add to your calendar to-do');
         },
         'AMAZON.NoIntent': function() {
             analytics.event("Response", "EndSession", "AMAZON.YesIntent from waitAddItemHandlers").send();
-            this.emit(':tell', 'Thank you for using calendar do list');
+            this.emit(':tell', 'Thank you for using calendar to-do');
         },
         'AMAZON.CancelIntent': function() {
             analytics.event("Response", "EndSession", "AMAZON.CancelIntent from waitAddItemHandlers").send();
-            this.emit(':tell', 'Thank you for using calendar do list');
+            this.emit(':tell', 'Thank you for using calendar to-do');
         },
         'AMAZON.StopIntent': function() {
             analytics.event("Response", "EndSession", "AMAZON.StopIntent from waitAddItemHandlers").send();
-            this.emit(':tell', 'Thank you for using calendar do list');
+            this.emit(':tell', 'Thank you for using calendar to-do');
         },
         'AMAZON.HelpIntent': function() {
             analytics.event("Response", "Help Response", "AMAZON.HelpIntent from waitAddItemHandlers").send();
@@ -335,6 +326,7 @@ exports.handler = function(event, context, callback) {
                 .then(calendar.sortTodaysEvents)
                 .then(calendar.getDoListEvent)
                 .then(function(doList) {
+                    console.log("Do List: "+doList);
                     return calendar.completeItemInList(doList, item);
                 })
                 .then(function() {
@@ -407,15 +399,15 @@ exports.handler = function(event, context, callback) {
         },
         'AMAZON.NoIntent': function() {
             analytics.event("Response", "EndSession", "AMAZON.NoIntent from waitMarkItemCompletedHandlers").send();
-            this.emit(':tell', 'Thank you for using calendar do list');
+            this.emit(':tell', 'Thank you for using calendar to-do');
         },
         'AMAZON.CancelIntent': function() {
             analytics.event("Response", "EndSession", "AMAZON.CancelIntent from waitMarkItemCompletedHandlers").send();
-            this.emit(':tell', 'Thank you for using calendar do list');
+            this.emit(':tell', 'Thank you for using calendar to-do');
         },
         'AMAZON.StopIntent': function() {
             analytics.event("Response", "EndSession", "AMAZON.StopIntent from waitMarkItemCompletedHandlers").send();
-            this.emit(':tell', 'Thank you for using calendar do list');
+            this.emit(':tell', 'Thank you for using calendar to-do');
         },
         'AMAZON.HelpIntent': function() {
             analytics.event("Response", "Help Response", "AMAZON.HelpIntent from waitMarkItemCompletedHandlers").send();
@@ -423,44 +415,9 @@ exports.handler = function(event, context, callback) {
             this.emit(':ask', message, message);
         },
         'Unhandled': function() {
-            if (event.request.intent.name == "addItem") {
-                
-                global.alexa = (this);
-                var itemsList;
-                
-                calendar.getAllCalendars()
-                .then(calendar.getTodaysEvents)
-                .then(calendar.sortTodaysEvents)
-                .then(calendar.getAllDoListItems)
-                .then(calendar.getDoListItems)
-                .then(function(doList) {
-        
-                    var myPromise = new Promise(function(resolve,reject) {
-
-                        if (doList.length > 7) {
-                            itemsList = "The first 7 items on your list are " + calendar.doListToString(doList, 7) + ". Which one would you like to mark as complete?";
-                        } else if ( doList.length > 0 ) {
-                            itemsList = "Your do list has " + calendar.doListToString(doList, 7) + ". Which one would you like to mark as complete?";
-                        }
-                        resolve;
-                    });
-                    
-                    return myPromise;
-                    
-                })
-                .catch(function(err) {
-                    //console.log("error here!: "+err);
-                    analytics.event("Error", err, "Unhandled from waitAddItemHandlers").send();
-                    global.alexa.emit(':tell', "Skill Error: "+err);
-                });
-                
-                analytics.event("Prompt", "Say Number", "Unhandled from waitAddItemHandlers").send();
-                this.emit(':ask', 'I am having trouble recognizing your intent. You can choose an item to mark as complete by saying the its number in the list. ' + itemsList, 'Say a number in the list that you would like to mark as complete.');
-            } else {
-                analytics.event("Prompt", "What to Complete?", "Unhandled from waitAddItemHandlers").send();
-                var message = "Say an item or list number to mark as complete, or say exit, to cancel."
-                this.emit(':ask', message, message);
-            }
+            analytics.event("Prompt", "What to Complete?", "Unhandled from waitAddItemHandlers").send();
+            var message = "Say an item or list number to mark as complete, or say exit, to cancel."
+            this.emit(':ask', message, message);
         } 
         
     });

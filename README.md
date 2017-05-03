@@ -13,14 +13,14 @@ To represent completed items, add a line that says "Done" or "Completed" and pla
 
 To have Alexa read your list, follow the prompts:
 
-* Alexa, start Calendar Do List
+* Alexa, start Calendar To-Do
 * What's on my do list?
 
 ## Adding To Your Do List:
 
 To add something to your list, follow the prompts:
 
-* Alexa, start Calendar Do List
+* Alexa, start Calendar To-Do
 * Add something to my do list. 
 * "Do Laundry"
 
@@ -31,14 +31,14 @@ Try saying a different variation of what you want to add (eg. "Wash my Clothes" 
 
 To mark something as completed, follow the prompts:
 
-* Alexa, start Calendar Do List
+* Alexa, start Calendar To-Do
 * Mark something as completed
 * "Do Laundry"
 
 The same difficulties with recognizing the language applies in this situation, but unfortunately Alexa will not be able to recognize a differently phrased version of your item. 
 We recommend a slightly more complicated approach which involves telling Alexa which numbered item you'd like to mark as complete. 
 
-* Alexa, start Calendar Do List
+* Alexa, start Calendar To-Do
 * Mark something as completed
 * 3
 
@@ -46,7 +46,9 @@ The following example will demonstrate this.
 
 # Examples
 
-* Alexa, start Calendar Do List
+### Giving Individual Instructions
+
+* Alexa, start Calendar To-Do
 
 > What would you like to do?
 
@@ -71,6 +73,25 @@ or
 * "Do Laundry"
 
 > Do Laundry has been added to your do list.
+
+### Combining Instructions
+
+* Alexa, ask Calendar To-Do to add an item to my list
+
+> What would you like to add to your do list?
+
+--
+
+* Alexa, ask Calendar To-Do whats on my do list?
+
+> You have 3 things on your do list: Clean Kitchen, Mow Lawn, and Do Laundry. 
+
+--
+
+* Alexa, tell Calendar To-Do mark item as done
+
+> What would you like to mark as completed?
+
 
 ## Questions or Comments?
 

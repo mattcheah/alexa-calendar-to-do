@@ -280,12 +280,16 @@ module.exports = {
           var edited = false;
           
           if (doList.description) {
-              doList = doList.description.split("\n");
-              var doneIndex = module.exports.getDoneIndex(doList); 
               var edited = false;
+              doList = doList.description.split("\n");
               
+              var doneIndex = module.exports.getDoneIndex(doList); 
+              if (doneIndex == -1) {
+                 doList.push("\n", "done");
+                 edited = true;
+              }
               
-              
+
               if (typeof item == "number") {
                   item--;
                   
@@ -300,9 +304,14 @@ module.exports = {
                   }
                   
               } else {
+                console.log("Item is: "+item);
                 for(var i = 0; i<doList.length; i++) {
                     if (doList[i].toLowerCase() == item.toLowerCase()) {
-                        doList.splice(i, 1).push(item);
+                        console.log("Match! "+doList[i].toLowerCase());
+                        console.log("Before dolist: "+doList);
+                        doList.splice(i, 1);
+                        doList.push(item);
+                        console.log("After dolist: "+doList);
                         edited = true;
                         break;
                     }
@@ -310,10 +319,6 @@ module.exports = {
               }
               
               
-              if (doneIndex == -1) {
-                 doList.splice(doList.length - 2, 0, "\n", "done");
-                 edited = true;
-              }
               if (edited == true) {
                   doListString = doList.join("\n"); 
                  //console.log("Do list string: "+doListString);
