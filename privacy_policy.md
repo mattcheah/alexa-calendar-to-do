@@ -1,6 +1,6 @@
 # Privacy Policy
 
-The following is the privacy policy for the Alexa skill "Calendar Do List". 
+The following is the privacy policy for the Alexa skill "Calendar To-Do". 
 This document will go over in detail how the skill collects, protects, and uses information.
 
 ## What Information Is Collected?

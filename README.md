@@ -1,4 +1,4 @@
-# Alexa - Calendar Do List
+# Alexa - Calendar To-Do
 An Alexa Skills app built in Node, used to read and edit a to-do list stored in your google calendar. 
 If you keep your to-do list as an event in your calendar, install this skill and ask Alexa to list out your to-do items
 
